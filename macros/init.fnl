@@ -8,10 +8,12 @@
 ; TODO: implement `pattern` for functions that inline like macros instead of like C functions
 ; TODO: some way to have a macro that's also just a function (hexc-style)
 
+(local {: copy
+        : expand-macros
+        : eval
+       } (require :macros.macro-utils))
 
-(fn copy [arr]
-  (collect [k v (pairs arr)]
-    (values k v)))
+
 
 {
 ; returns the first non-nil argument
@@ -24,6 +26,11 @@
             (if (not= nil val#)
               val#
               ,(default (select 2 ...))))))
+
+; executes macro code in-line
+; the name comes from verilog's generate keyword
+:generate (fn [& body]
+  (eval `(do ,(unpack body))))
 
 ; like do but does the first action last
 ; made to be combined with <<-
@@ -52,12 +59,16 @@
       found#))
 
 ; returns if any element from the table matches the predicate
-:table.any? (fn [pred arr]
+:table.any? (fn any? [pred arr]
   `(not= nil ,(any pred arr)))
 
 ; returns if all elements from the table match the predicate
 :table.all? (fn [pred arr]
   `(= nil ,(any `#(not (,pred $...)) arr)))
+
+; returns if the element is contained in the table
+:table.in? (fn [el arr]
+  (any? `#(= $ ,el) arr))
 
 ; counts how many items in the table match the predicate function
 :table.count (fn [pred arr]
@@ -66,14 +77,16 @@
         (if (,pred item#) 1 0))))
 
 ; increments a variable, either by 1 or by the supplied value
+; assumes the variable is 0 if it's nil
 :inc (fn [v ?val]
   (local val (or ?val '1))
-  `(set ,v (+ ,v ,val)))
+  `(set ,v (+ ,(default v '0) ,val)))
 
 ; decrements a variable, either by 1 or by the supplied value
+; assumes the variable is 0 if it's nil
 :dec (fn [v ?val]
   (local val (or ?val '1))
-  `(set ,v (- ,v ,val)))
+  `(set ,v (- ,(default v '0) ,val)))
 
 ; takes a table and returns the sum of the elements
 :math.sum (fn [arr]
@@ -85,8 +98,14 @@
   `(accumulate [prod# 1 _# val# (pairs ,arr)]
     (* prod# val#)))
 
-; alias for convenience
+:math.even? (fn [n] `(= 0 (% ,n 2)))
+:math.odd? (fn [n] `(= 1 (% ,n 2)))
+
+; aliases for convenience
 :π 'math.pi
+:√ 'math.sqrt
+:math.e '(math.exp 1)
+:math.ln 'math.log
 
 ; you know what map is
 :table.map (fn [f arr]
