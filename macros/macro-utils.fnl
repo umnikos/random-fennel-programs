@@ -1,3 +1,5 @@
+(require-macros :macros.table)
+
 ; shallow copy
 (fn copy [t]
   (let [out []]
@@ -37,10 +39,10 @@
 ; takes a macro function and returns another macro function
 ; the resulting macro function executes the resulting body if all arguments are literals
 (fn semimacro [f]
-  (fn [arg] ; FIXME: MORE THAN ONE ARG
-    (if (literal? arg)
-      (eval (f arg))
-      (f arg)
+  (fn [& args]
+    (if (table.all? literal? args)
+      (eval (f (unpack args)))
+      (f (unpack args))
     )
   )
 )
