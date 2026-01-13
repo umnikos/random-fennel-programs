@@ -68,4 +68,9 @@
 :table.copy (fn [arr]
   (concat arr))
 
+:table.keys (fn [arr]
+  `(icollect [k# _# (pairs ,arr)] k#))
+
+:table.vals (fn [arr]
+  `(icollect [_# v# (pairs ,arr)] v#))
 }

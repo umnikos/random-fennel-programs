@@ -22,8 +22,9 @@
       (sym? a) false
       (varg? a) false
       (comment? a) false
-      (sequence? a) false ; FIXME
-      (table? a) false ; FIXME
+      (sequence? a) (table.all? literal? a)
+      (table? a) (and (table.all? literal? (table.keys a))
+                      (table.all? literal? (table.vals a)))
       true))
 
 ; same as `compile` but does macroexpansion before compilation
