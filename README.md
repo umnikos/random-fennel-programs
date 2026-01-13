@@ -1,9 +1,9 @@
-# Random fennel programs
+# Random Fennel Programs
 
-This repo holds a bunch of stuff written in fennel (mostly macros).
-Everything here is made to be compiled or ran with [my fork of fennel](https://github.com/umnikos/fennel).
+This repo holds a bunch of stuff written in Fennel (mostly macros).
+Everything here is made to be compiled or ran with [my fork of Fennel](https://github.com/umnikos/fennel).
 
-## Why fennel?
+## Why Fennel?
 
 Lua is a beautifully simple language, but eventually after writing a lot of it it becomes apparent that there's a lot of boilerplate involved.
 While one can easily make abstractions that eliminate some of that boilerplate, these abstractions always come at a runtime cost that is difficult to quantify and difficult to get rid of.
