@@ -26,10 +26,9 @@
               val#
               ,(default (select 2 ...))))))
 
-; executes macro code in-line
+; executes macro code in-line and returns the result
 ; the name comes from verilog's generate keyword
-:generate (fn [& body]
-  (eval `(do ,(unpack body))))
+:generate eval
 
 ; like do but does the first action last
 ; made to be combined with <<-

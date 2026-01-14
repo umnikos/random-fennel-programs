@@ -33,9 +33,9 @@
         ast `(do ,(unpack expanded-args))]
       (compile ast)))
 
-; evals an ast
-(fn eval [ast]
-  ((load (compile ast))))
+; evals an ast or multiple asts
+(fn eval [...]
+  ((load (compile `(do ,...)))))
 
 ; takes a macro function and returns another macro function
 ; the resulting macro function executes the resulting body if all arguments are literals
