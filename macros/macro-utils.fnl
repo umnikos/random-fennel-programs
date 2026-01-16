@@ -34,8 +34,9 @@
       (compile ast)))
 
 ; evals an ast or multiple asts
+; does macroexpansion before compilation
 (fn eval [...]
-  ((load (compile `(do ,...)))))
+  ((load (compiled ...))))
 
 ; takes a macro function and returns another macro function
 ; the resulting macro function executes the resulting body if all arguments are literals
