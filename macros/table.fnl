@@ -36,12 +36,12 @@
         (if (,pred item#) 1 0))))
 ; you know what map is
 :table.map (fn [f arr]
-  `(collect [_# val# (pairs ,arr)]
-     (,f val#)))
+  `(collect [k# val# (pairs ,arr)]
+     (values k# (,f val#))))
 
 ; you also know what filter is
-:table.filter (fn [f arr]
-  `(collect [_# val# (pairs ,arr)]
+:table.ifilter (fn [f arr]
+  `(icollect [_# val# (ipairs ,arr)]
      (if (,f val#) val#)))
 
 ; produces a new array that's a concatenation of all of the given ones

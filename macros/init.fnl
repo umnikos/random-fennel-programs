@@ -37,6 +37,14 @@
   (table.insert actions f)
   `(do ,(unpack actions)))
 
+; takes code and returns how much time it took to execute
+; on computercraft this measures time passed
+; on puc lua this measures cpu time used
+:timeit (fn [...]
+  `(let [start-time# (os.clock)]
+     (do ,...)
+     (- (os.clock) start-time#)))
+
 ; increments a variable, either by 1 or by the supplied value
 ; assumes the variable is 0 if it's nil
 :inc (fn [v ?val]
