@@ -37,6 +37,27 @@
   (table.insert actions f)
   `(do ,(unpack actions)))
 
+; accepts a let-style bindings list instead of a condition
+; the last variable in the bindings list is treated as the condition
+; example:
+;   (if-let
+;     [a 10 b nil] b
+;     [c (+ a 10)] c
+;     100)
+;   ->  20
+:if-let (fn if-let [bindings t ...]
+  (local n (length bindings))
+  (assert-compile (= 0 (% n 2)) "uneven number of elements in let bindings" bindings)
+  (assert-compile t "t is nil" t)
+  (local last-symbol (. bindings (- n 1)))
+  `(let ,bindings
+    (if ,last-symbol
+      ,t
+      ,(case (select :# ...)
+         0 'nil
+         1 ...
+         _ (if-let ...)))))
+
 ; takes code and returns how much time it took to execute
 ; on computercraft this measures time passed
 ; on puc lua this measures cpu time used
