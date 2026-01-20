@@ -20,6 +20,26 @@
      (- (os.clock) start-time#)))
 
 
+:class (λ [name fields ...]
+  (import-macros {: default} :macros.flow)
+  (assert-compile (sym? name) "name should be a symbol" name)
+  (assert-compile (sequence? fields))
+
+  (local fields-without-first
+    (fcollect [i 2 (length fields)] (. fields i)))
+  
+  (local data-setting
+    (collect [_ v (ipairs fields-without-first)] (values (tostring v) v)))
+
+  `(local ,name (setmetatable {} {:__call (fn [class# ,(unpack fields-without-first)]
+     (local ,(. fields 1) (setmetatable ,data-setting {:__index class#}))
+     (do ,...)
+     ,(. fields 1)
+  )}))
+  
+)
+
+
 })
 
 
