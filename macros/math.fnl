@@ -24,8 +24,13 @@
   `(accumulate [prod# 1 _# val# (pairs ,arr)]
     (* prod# val#)))
 
-:math.even? (fn [n] `(= 0 (% ,n 2)))
-:math.odd? (fn [n] `(= 1 (% ,n 2)))
+:math.even? (λ [n] `(= 0 (% ,n 2)))
+:math.odd? (λ [n] `(= 1 (% ,n 2)))
+
+:math.sign (λ [n]
+  `(if (> ,n 0) 1
+       (< ,n 0) -1
+       0))
 
 :math.at-most 'math.min
 :math.at-least 'math.max
@@ -34,7 +39,12 @@
 :π 'math.pi
 :√ 'math.sqrt
 :math.e '(math.exp 1)
+:∞ .inf
+:-∞ -.inf
+
 :math.ln 'math.log
+:math.log2 (λ [n] `(math.log ,n 2))
+:math.log10 (λ [n] `(math.log ,n 10))
 
   
 }
