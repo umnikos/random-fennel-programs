@@ -15,6 +15,9 @@
               val#
               ,(default (select 2 ...))))))
 
+:set-default (fn [v ...]
+  `(set ,v ,(default v ...)))
+
 ; executes macro code in-line and returns the result
 ; the name comes from verilog's generate keyword
 :generate eval

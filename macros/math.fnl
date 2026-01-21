@@ -27,6 +27,9 @@
 :math.even? (fn [n] `(= 0 (% ,n 2)))
 :math.odd? (fn [n] `(= 1 (% ,n 2)))
 
+:math.at-most 'math.min
+:math.at-least 'math.max
+
 ; aliases for convenience
 :π 'math.pi
 :√ 'math.sqrt
