@@ -21,26 +21,36 @@
 
 
 :class (λ [name fields ...]
-  (import-macros {: default} :macros.flow)
   (assert-compile (sym? name) "name should be a symbol" name)
   (assert-compile (sequence? fields))
 
-  (local fields-without-first
-    (fcollect [i 2 (length fields)] (. fields i)))
+  ; (local fields-without-first
+  ;   (fcollect [i 2 (length fields)] (. fields i)))
   
   (local data-setting
-    (collect [_ v (ipairs fields-without-first)] (values (tostring v) v)))
+    (collect [_ v (ipairs fields)] (values (tostring v) v)))
 
-  `(local ,name (setmetatable {} {:__call (fn [class# ,(unpack fields-without-first)]
-     (local ,(. fields 1) (setmetatable ,data-setting {:__index class#}))
+  (local constructor `(fn [class# ,(unpack fields)]
+     (local ,(sym :self) (setmetatable ,data-setting class#))
      (do ,...)
-     ,(. fields 1)
-  )}))
-  
+     ,(sym :self)
+  ))
+
+  `(local ,name (let [t# {:__type ,(tostring name) :__call ,constructor}]
+      (set t#.__index t#)
+      (let [c# {}]
+        (set c#.__index c#)
+        (setmetatable c# t#)))))
+
+:classtype (fn [v]
+  (local {: default} (require :macros.flow))
+  `(case (type ,v)
+     :table ,(default `(?. (getmetatable ,v) :__type) :table)
+     type# type#)
 )
 
-
 })
+
 
 
 (require-macros :macros.table)
